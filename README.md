@@ -3,19 +3,13 @@
 ## Concetti chiave
 
 CSV (data/raw)
-                 │
-                 ▼
-        [container ELT: Python]
-       - pandas calcola metriche
-       - carica in Postgres (brand_stats)
-                 │
-                 ▼
-         [container Postgres]
-      tabella public.brand_stats
-                 │
-                 ▼
-         [container Grafana]
-   dashboard legge via SQL e mostra
+>[container ELT: Python]
+ - pandas calcola metriche
+ - carica in Postgres (brand_stats)
+>[container Postgres]
+tabella public.brand_stats
+>[container Grafana]
+dashboard legge via SQL e mostra
 
 ## Prerequisiti
 
