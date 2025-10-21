@@ -1,9 +1,6 @@
 # Data Engineering - Quickstart & Guida
 
-> **Nota sui path con spazi (macOS):** quando usi il terminale, **metti tra virgolette** il path della cartella progetto:  
-> `cd "/Users/<utente>/Data Engineering"`
-
-## Concetti chiave (in 2 minuti)
+## Concetti chiave
 
 - **Docker**: avvia servizi isolati in **container** (es. Postgres, Grafana).  
 - **Docker Compose**: accende più servizi assieme (definiti in `compose/docker-compose.yml`).
