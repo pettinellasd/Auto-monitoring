@@ -2,14 +2,17 @@
 
 ## Concetti chiave
 
-CSV (data/raw)
->[container ELT: Python]
+Si parte dal CSV (data/raw)
+
+1) [container ELT: Python]
  - pandas calcola metriche
  - carica in Postgres (brand_stats)
->[container Postgres]
+
+2) [container Postgres]
 tabella public.brand_stats
->[container Grafana]
-dashboard legge via SQL e mostra
+
+3) [container Grafana]
+ - dashboard legge via SQL e mostra i grafici
 
 ## Prerequisiti
 
