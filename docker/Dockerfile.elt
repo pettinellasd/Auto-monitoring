@@ -1,0 +1,18 @@
+FROM python:3.12-slim
+
+WORKDIR /app
+
+# Dipendenze del job
+RUN pip install --no-cache-dir \
+    pandas>=2.2 pyarrow>=16.0 duckdb==1.0.0 \
+    "sqlalchemy>=2.0" "psycopg[binary]>=3.1" \
+    python-dotenv openpyxl
+
+# Copia solo il codice (i dati li monteremo come volumi)
+COPY src/ ./src/
+COPY compose/.env ./compose/.env
+
+ENV PYTHONUNBUFFERED=1
+
+# Comando di default: esegue il job auto
+CMD ["python","-u","src/jobs/elt_auto.py"]

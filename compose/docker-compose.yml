@@ -1,0 +1,52 @@
+                                             
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: de-postgres
+    ports:
+      - "5432:5432" # Espone Postgres sulla porta 5432 dell'host.
+    environment: # Variabili d'ambiente passate all'immagine.
+      POSTGRES_USER: ${POSTGRES_USER} # Utente iniziale creato all'init. Variabili interpolate da .env.
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB} # DB creato all'avvio e posseduto dall'utente.
+    healthcheck: # Controllo di salute per sapere quando il DB è pronto.
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB} || exit 1"] # Usa pg_isready.
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - postgres_data:/var/lib/postgresql/data # Dati Postgres persistenti in un volume nominato.
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: de-grafana # Nome leggibile del container.
+    ports:
+      - "3000:3000" # Espone la UI di Grafana su http://localhost:3000
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD}
+    volumes:
+      - ../grafana:/var/lib/grafana # Persistenza (DB/plug-in/config) nella cartella ./grafana locale.
+      - ../grafana/provisioning:/etc/grafana/provisioning:ro
+    depends_on: # Ordina l'avvio rispetto ad altri servizi.
+      postgres:
+        condition: service_healthy # Avvia Grafana solo quando Postgres è 'healthy'.
+
+  elt:
+    profiles: ["manual"] # così non parte conb makeup
+    build:
+      context: ..
+      dockerfile: ./docker/Dockerfile.elt
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql+psycopg://analytics:analytics@postgres:5432/analytics
+    volumes:
+      - ../data:/app/data
+      - ../lake:/app/lake
+      - ../compose/.env:/app/compose/.env:ro
+      
+
+volumes: # Dichiarazione dei volumi nominati usati sopra.
+  postgres_data: {} # Volume vuoto (Compose crea e gestisce lo storage).

@@ -1,0 +1,29 @@
+# macOS / editor
+.DS_Store
+.vscode/
+.idea/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+.env
+.env.*
+dist/
+build/
+
+# Dati e artefatti locali
+data/*
+!data/.gitkeep
+lake/*
+!lake/.gitkeep
+logs/
+tmp/
+
+# Notebook
+.ipynb_checkpoints/
+
+# Docker
+compose/.env
+grafana/*.db
