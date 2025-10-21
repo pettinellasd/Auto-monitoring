@@ -2,12 +2,20 @@
 
 ## Concetti chiave
 
-- **Docker**: avvia servizi isolati in **container** (es. Postgres, Grafana).  
-- **Docker Compose**: accende più servizi assieme (definiti in `compose/docker-compose.yml`).
-- **ELT**: **E**xtract (legge CSV) → **L**oad/**T**ransform (calcola metriche) → scrive su **Postgres**.
-- **SQL**: linguaggio (SELECT/INSERT/…) capito dai motori DB (PostgreSQL nel nostro caso).
-- **Grafana**: client BI che si collega a Postgres e **visualizza** le query in grafici/KPI.
-- **Makefile**: comandi corti (es. `make up`) che eseguono comandi lunghi Docker/psql per te.
+CSV (data/raw)
+                 │
+                 ▼
+        [container ELT: Python]
+       - pandas calcola metriche
+       - carica in Postgres (brand_stats)
+                 │
+                 ▼
+         [container Postgres]
+      tabella public.brand_stats
+                 │
+                 ▼
+         [container Grafana]
+   dashboard legge via SQL e mostra
 
 ## Prerequisiti
 
